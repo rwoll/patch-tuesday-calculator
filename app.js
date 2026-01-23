@@ -122,14 +122,16 @@ function populateSelectors() {
   // Clear existing options and populate months
   monthSelect.replaceChildren();
   months.forEach((month, index) => {
-    const option = new Option(month, index, index === defaultMonth, index === defaultMonth);
+    const isSelected = index === defaultMonth;
+    const option = new Option(month, index, isSelected, isSelected);
     monthSelect.add(option);
   });
 
   // Populate years (5 years before to 10 years after current year)
   yearSelect.replaceChildren();
   for (let y = currentYear - 5; y <= currentYear + 10; y++) {
-    const option = new Option(y, y, y === defaultYear, y === defaultYear);
+    const isSelected = y === defaultYear;
+    const option = new Option(y, y, isSelected, isSelected);
     yearSelect.add(option);
   }
 }
