@@ -95,7 +95,11 @@ function populateSelectors() {
   const monthSelect = document.getElementById('month-select');
   const yearSelect = document.getElementById('year-select');
   const currentYear = new Date().getFullYear();
-  const currentMonth = new Date().getMonth();
+  
+  // Default to the next Patch Tuesday's month/year instead of current month/year
+  const nextPatchTuesday = getNextPatchTuesdays(1)[0];
+  const defaultMonth = nextPatchTuesday.getMonth();
+  const defaultYear = nextPatchTuesday.getFullYear();
 
   // Populate months
   const months = [
@@ -104,7 +108,7 @@ function populateSelectors() {
   ];
 
   monthSelect.innerHTML = months.map((month, index) =>
-    `<option value="${index}" ${index === currentMonth ? 'selected' : ''}>${month}</option>`
+    `<option value="${index}" ${index === defaultMonth ? 'selected' : ''}>${month}</option>`
   ).join('');
 
   // Populate years (5 years before to 10 years after current year)
@@ -114,7 +118,7 @@ function populateSelectors() {
   }
 
   yearSelect.innerHTML = years.map(year =>
-    `<option value="${year}" ${year === currentYear ? 'selected' : ''}>${year}</option>`
+    `<option value="${year}" ${year === defaultYear ? 'selected' : ''}>${year}</option>`
   ).join('');
 }
 
