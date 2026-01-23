@@ -76,16 +76,28 @@ function renderUpcomingDates() {
   const container = document.getElementById('upcoming-dates');
   const dates = getNextPatchTuesdays(12);
 
-  container.innerHTML = dates.map((date, index) => {
+  // Clear existing content
+  container.replaceChildren();
+
+  dates.forEach((date, index) => {
     const daysAway = getDaysAway(date);
     const isFirst = index === 0;
-    return `
-      <div class="date-item ${isFirst ? 'highlight' : ''}">
-        <span class="date">${formatDate(date)}</span>
-        <span class="badge ${isFirst ? 'primary' : ''}">${formatDaysAway(daysAway)}</span>
-      </div>
-    `;
-  }).join('');
+
+    const dateItem = document.createElement('div');
+    dateItem.className = isFirst ? 'date-item highlight' : 'date-item';
+
+    const dateSpan = document.createElement('span');
+    dateSpan.className = 'date';
+    dateSpan.textContent = formatDate(date);
+
+    const badgeSpan = document.createElement('span');
+    badgeSpan.className = isFirst ? 'badge primary' : 'badge';
+    badgeSpan.textContent = formatDaysAway(daysAway);
+
+    dateItem.appendChild(dateSpan);
+    dateItem.appendChild(badgeSpan);
+    container.appendChild(dateItem);
+  });
 }
 
 /**
@@ -107,19 +119,21 @@ function populateSelectors() {
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
-  monthSelect.innerHTML = months.map((month, index) =>
-    `<option value="${index}" ${index === defaultMonth ? 'selected' : ''}>${month}</option>`
-  ).join('');
+  // Clear existing options and populate months
+  monthSelect.replaceChildren();
+  months.forEach((month, index) => {
+    const isSelected = index === defaultMonth;
+    const option = new Option(month, index, isSelected, isSelected);
+    monthSelect.add(option);
+  });
 
   // Populate years (5 years before to 10 years after current year)
-  const years = [];
+  yearSelect.replaceChildren();
   for (let y = currentYear - 5; y <= currentYear + 10; y++) {
-    years.push(y);
+    const isSelected = y === defaultYear;
+    const option = new Option(y, y, isSelected, isSelected);
+    yearSelect.add(option);
   }
-
-  yearSelect.innerHTML = years.map(year =>
-    `<option value="${year}" ${year === defaultYear ? 'selected' : ''}>${year}</option>`
-  ).join('');
 }
 
 /**
